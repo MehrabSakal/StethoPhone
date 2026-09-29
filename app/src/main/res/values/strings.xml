@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">PulmoDSP - Lung Sound Analyzer</string>
+    <string name="title_recording">Acoustic Lung Sound Capture</string>
+    <string name="subtitle_recording">Raw 16-bit PCM Acquisition (USB-C Hardware Rate Locked)</string>
+
+    <string name="status_ready">Ready to record raw acoustic lung sounds</string>
+    <string name="status_recording">Recording raw audio stream…</string>
+    <string name="status_stopped">Recording saved as bit-perfect canonical RIFF/WAV</string>
+    <string name="status_dsp_processing">Applying 2nd-order Butterworth Band-Pass (50 Hz – 2000 Hz)…</string>
+    <string name="status_dsp_complete">DSP Filtering complete. Noise removed!</string>
+    <string name="status_dsp_error">Error during DSP filtering</string>
+
+    <!-- Buttons -->
+    <string name="btn_start_record">Record</string>
+    <string name="btn_stop_record">Stop</string>
+    <string name="btn_remove_noise">Apply Noise Reduction (50 Hz – 2 kHz)</string>
+    <string name="btn_processing">Filtering Audio…</string>
+    <string name="btn_play">Play</string>
+    <string name="btn_pause">Pause</string>
+    <string name="btn_stop">Stop</string>
+
+    <!-- Badges & Labels -->
+    <string name="label_original_recording">Original Recording (Raw PCM)</string>
+    <string name="label_filtered_recording">Cleaned Recording (Band-Pass Filtered)</string>
+    <string name="badge_raw">UNPROCESSED RAW</string>
+    <string name="badge_filtered">50 Hz – 2000 Hz BUTTERWORTH</string>
+    <string name="label_hardware_info">Hardware &amp; Audio Routing Status</string>
+    <string name="usb_status_checking">Detecting USB audio hardware…</string>
+
+    <!-- Permissions -->
+    <string name="permission_rationale">PulmoDSP requires microphone permissions to capture raw acoustic respiratory sounds from your USB-C audio interface.</string>
+    <string name="permission_denied">Microphone permission denied. Cannot capture lung sounds.</string>
+</resources>
