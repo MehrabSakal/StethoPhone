@@ -103,8 +103,8 @@ SystemApp/
 
 ---
 
-## 🚀 Running the App
 
+<<<<<<< HEAD
 ### Option A: Flutter (Minimalist UI with Classic Record Screen & Recordings Library)
 ```bash
 flutter pub get
@@ -118,3 +118,5 @@ flutter run
 1. Open `f:\3-1\SystemApp` in Android Studio.
 2. Select your device or emulator and press **Run (▶)**.
 3. Record breath sounds, choose **10x ML**, and tap **Clean & Amplify Audio**.
+=======
+>>>>>>> 546118b8087873e2296d8e2f0136f3a12f13cf82
