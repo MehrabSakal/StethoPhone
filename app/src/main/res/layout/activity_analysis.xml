@@ -6,10 +6,12 @@
     android:layout_height="match_parent"
     android:background="@color/background">
 
+    <!-- Top AppBar with Tabs -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/surface">
+        android:background="@color/surface"
+        app:elevation="0dp">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/analysisToolbar"
@@ -17,7 +19,12 @@
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="?attr/homeAsUpIndicator"
             app:title="Sound Diagnostics &amp; ML"
-            app:subtitle="Spectrogram, PPG &amp; Time-Expanded Wave" />
+            app:subtitle="A/B Comparison &amp; Acoustic Analytics" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/analysisTabs"
@@ -32,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="8dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -41,11 +48,174 @@
             android:orientation="vertical"
             android:padding="16dp">
 
+            <!-- 1. HERO SOUND COMPARISON & AUDIO PLAYER CARD -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardSoundPlayer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/divider"
+                app:cardBackgroundColor="@color/surface">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- A/B Comparison Toggle Buttons -->
+                    <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:id="@+id/toggleGroupTrack"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:singleSelection="true"
+                        app:selectionRequired="true">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSelectRaw"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Actual Sound (Raw)"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            app:icon="@drawable/ic_mic"
+                            app:iconSize="16dp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSelectCleaned"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Amplified (10x ✨)"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            app:icon="@drawable/ic_filter"
+                            app:iconSize="16dp" />
+                    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                    <!-- Generate Cleaned & Amplified Sound Callout (shown if not generated) -->
+                    <LinearLayout
+                        android:id="@+id/layoutGenerateCallout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/bg_badge_raw"
+                        android:orientation="vertical"
+                        android:padding="12dp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="10x Amplified sound not generated yet"
+                            android:textColor="@color/badge_raw_text"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Apply 5-Pass DSP: bandpass, DWT db8 cardiac removal &amp; +20dB boost"
+                            android:textColor="@color/on_surface_muted"
+                            android:textSize="11sp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnGenerateCleaned"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="✨ Clean &amp; 10x Amplify Sound"
+                            android:textSize="12sp"
+                            app:backgroundTint="@color/primary" />
+
+                        <ProgressBar
+                            android:id="@+id/progressGenerating"
+                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="4dp"
+                            android:layout_marginTop="6dp"
+                            android:indeterminate="true"
+                            android:visibility="gone" />
+                    </LinearLayout>
+
+                    <!-- Audio Progress & Time -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvPlayerCurrentTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="00:00"
+                            android:textColor="@color/on_surface"
+                            android:textSize="12sp"
+                            android:fontFamily="monospace"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvTrackInfoBadge"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Raw PCM • 48 kHz • Unprocessed"
+                            android:textAlignment="center"
+                            android:textColor="@color/on_surface_muted"
+                            android:textSize="10.5sp" />
+
+                        <TextView
+                            android:id="@+id/tvPlayerTotalTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="00:00"
+                            android:textColor="@color/on_surface"
+                            android:textSize="12sp"
+                            android:fontFamily="monospace"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <SeekBar
+                        android:id="@+id/seekAnalysisPlayer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:max="100" />
+
+                    <!-- Playback Controls -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnAnalysisPlayPause"
+                            style="@style/Widget.Material3.Button.IconButton.Filled"
+                            android:layout_width="54dp"
+                            android:layout_height="54dp"
+                            app:icon="@drawable/ic_play"
+                            app:iconSize="28dp"
+                            app:backgroundTint="@color/primary" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <!-- Loading indicator -->
             <LinearLayout
                 android:id="@+id/layoutLoading"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="140dp"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:visibility="gone">
@@ -61,7 +231,7 @@
                     android:layout_marginTop="12dp"
                     android:text="Generating Spectrogram, PPG &amp; ML Metrics…"
                     android:textColor="@color/on_surface_muted"
-                    android:textSize="13sp" />
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -70,8 +240,9 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!-- 1. ML DISEASE DETECTION FEATURES CARD -->
+                <!-- 2. ML DISEASE DETECTION FEATURES CARD -->
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardMlDiagnostics"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
@@ -97,21 +268,21 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="ML Disease Detection Features"
+                                android:text="ML Acoustic Biomarkers"
                                 android:textColor="@color/on_surface"
-                                android:textSize="14sp"
+                                android:textSize="15sp"
                                 android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/tvMlBadge"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/bg_badge_clean"
+                                android:background="@drawable/bg_badge_raw"
                                 android:paddingHorizontal="8dp"
                                 android:paddingVertical="3dp"
-                                android:text="10x ML READY"
-                                android:textColor="@color/badge_clean_text"
-                                android:textSize="10.5sp"
+                                android:text="RAW ACOUSTIC"
+                                android:textColor="@color/badge_raw_text"
+                                android:textSize="10sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
@@ -121,7 +292,7 @@
                             android:layout_marginVertical="12dp"
                             android:background="@color/divider" />
 
-                        <!-- Metric Row 1 -->
+                        <!-- Row 1: BPM, Dominant Freq, SNR -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -132,9 +303,29 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Resp. Rate" android:textColor="@color/on_surface_muted" android:textSize="11sp" />
-                                <TextView android:id="@+id/tvMetricBpm" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="16.5" android:textColor="@color/on_surface" android:textSize="16sp" android:textStyle="bold" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="BPM (PPG)" android:textColor="@color/on_surface_muted" android:textSize="9.5sp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Resp. Rate"
+                                    android:textColor="@color/on_surface_muted"
+                                    android:textSize="11sp" />
+
+                                <TextView
+                                    android:id="@+id/tvBpmValue"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="-- BPM"
+                                    android:textColor="@color/on_surface"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="PPG Peak Est."
+                                    android:textColor="@color/on_surface_muted"
+                                    android:textSize="9.5sp" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -142,9 +333,29 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Dominant Peak" android:textColor="@color/on_surface_muted" android:textSize="11sp" />
-                                <TextView android:id="@+id/tvMetricPeakFreq" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="280" android:textColor="@color/on_surface" android:textSize="16sp" android:textStyle="bold" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Hz (Spectral)" android:textColor="@color/on_surface_muted" android:textSize="9.5sp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Peak Freq"
+                                    android:textColor="@color/on_surface_muted"
+                                    android:textSize="11sp" />
+
+                                <TextView
+                                    android:id="@+id/tvDominantFreq"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="-- Hz"
+                                    android:textColor="@color/on_surface"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Fourier Peak"
+                                    android:textColor="@color/on_surface_muted"
+                                    android:textSize="9.5sp" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -152,13 +363,33 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SNR Quality" android:textColor="@color/on_surface_muted" android:textSize="11sp" />
-                                <TextView android:id="@+id/tvMetricSnr" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="32.4" android:textColor="@color/on_surface" android:textSize="16sp" android:textStyle="bold" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="dB (Cleanliness)" android:textColor="@color/on_surface_muted" android:textSize="9.5sp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="SNR Quality"
+                                    android:textColor="@color/on_surface_muted"
+                                    android:textSize="11sp" />
+
+                                <TextView
+                                    android:id="@+id/tvSnrValue"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="-- dB"
+                                    android:textColor="@color/on_surface"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Audio Clarity"
+                                    android:textColor="@color/on_surface_muted"
+                                    android:textSize="9.5sp" />
                             </LinearLayout>
                         </LinearLayout>
 
-                        <!-- Metric Row 2 -->
+                        <!-- Row 2: Vesicular, Bronchial, Gain -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -170,9 +401,29 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Vesicular Energy" android:textColor="@color/on_surface_muted" android:textSize="11sp" />
-                                <TextView android:id="@+id/tvMetricVesicular" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="74.2%" android:textColor="@color/primary" android:textSize="15sp" android:textStyle="bold" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="100–1000 Hz" android:textColor="@color/on_surface_muted" android:textSize="9.5sp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Vesicular Band"
+                                    android:textColor="@color/on_surface_muted"
+                                    android:textSize="11sp" />
+
+                                <TextView
+                                    android:id="@+id/tvVesicularRatio"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="--%"
+                                    android:textColor="@color/on_surface"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="100–1000 Hz"
+                                    android:textColor="@color/on_surface_muted"
+                                    android:textSize="9.5sp" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -180,9 +431,29 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bronchial Energy" android:textColor="@color/on_surface_muted" android:textSize="11sp" />
-                                <TextView android:id="@+id/tvMetricBronchial" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="23.8%" android:textColor="@color/secondary" android:textSize="15sp" android:textStyle="bold" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1000–2000 Hz" android:textColor="@color/on_surface_muted" android:textSize="9.5sp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Bronchial Band"
+                                    android:textColor="@color/on_surface_muted"
+                                    android:textSize="11sp" />
+
+                                <TextView
+                                    android:id="@+id/tvBronchialRatio"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="--%"
+                                    android:textColor="@color/on_surface"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="1000–2000 Hz"
+                                    android:textColor="@color/on_surface_muted"
+                                    android:textSize="9.5sp" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -190,15 +461,35 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="vertical">
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Gain Boost" android:textColor="@color/on_surface_muted" android:textSize="11sp" />
-                                <TextView android:id="@+id/tvMetricGain" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="10.0x" android:textColor="@color/secondary" android:textSize="15sp" android:textStyle="bold" />
-                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="+20 dB Normalized" android:textColor="@color/on_surface_muted" android:textSize="9.5sp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Gain Boost"
+                                    android:textColor="@color/on_surface_muted"
+                                    android:textSize="11sp" />
+
+                                <TextView
+                                    android:id="@+id/tvGainValue"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="1.0x (0dB)"
+                                    android:textColor="@color/on_surface"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Normalized"
+                                    android:textColor="@color/on_surface_muted"
+                                    android:textSize="9.5sp" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- 2. SPECTROGRAM HEATMAP CARD -->
+                <!-- 3. SPECTROGRAM CARD -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardSpectrogram"
                     android:layout_width="match_parent"
@@ -219,25 +510,16 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Spectrogram Heatmap (STFT 0 – 2.5 kHz)"
+                            android:text="STFT Spectrogram Heatmap (0 - 2.5 kHz)"
                             android:textColor="@color/on_surface"
                             android:textSize="14sp"
                             android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Reveals musical wheezes (horizontal tracks) and crackles (vertical spikes)."
-                            android:textColor="@color/on_surface_muted"
-                            android:textSize="11sp" />
 
                         <com.respiratory.lungaudio.ui.SpectrogramView
                             android:id="@+id/spectrogramView"
                             android:layout_width="match_parent"
                             android:layout_height="180dp"
-                            android:layout_marginTop="12dp"
-                            android:background="#0B1120" />
+                            android:layout_marginTop="12dp" />
 
                         <TextView
                             android:id="@+id/tvSpectrogramTimeScale"
@@ -251,7 +533,7 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- 3. PHONOPNEUMOGRAM (PPG) CARD -->
+                <!-- 4. PHONOPNEUMOGRAM (PPG) CARD -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardPpg"
                     android:layout_width="match_parent"
@@ -272,18 +554,10 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Phonopneumogram (Acoustic Respiratory PPG)"
+                            android:text="Phonopneumogram (Acoustic PPG Envelope)"
                             android:textColor="@color/on_surface"
                             android:textSize="14sp"
                             android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Acoustic volume envelope with detected inhalation and exhalation breath peaks."
-                            android:textColor="@color/on_surface_muted"
-                            android:textSize="11sp" />
 
                         <com.respiratory.lungaudio.ui.PhonopneumogramView
                             android:id="@+id/ppgView"
@@ -303,7 +577,7 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- 4. TIME-EXPANDED WAVEFORM CARD -->
+                <!-- 5. TIME-EXPANDED WAVEFORM CARD -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardWaveform"
                     android:layout_width="match_parent"
@@ -329,14 +603,6 @@
                             android:textSize="14sp"
                             android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="High-definition oscillogram showing exact acoustic amplitude oscillations."
-                            android:textColor="@color/on_surface_muted"
-                            android:textSize="11sp" />
-
                         <com.respiratory.lungaudio.ui.TimeExpandedWaveformView
                             android:id="@+id/waveformView"
                             android:layout_width="match_parent"
@@ -358,44 +624,5 @@
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-    <!-- PINNED BOTTOM AUDIO PLAYBACK BAR -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="72dp"
-        android:layout_gravity="bottom"
-        android:background="@color/surface"
-        android:elevation="8dp"
-        android:gravity="center_vertical"
-        android:paddingHorizontal="16dp"
-        android:orientation="horizontal">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAnalysisPlayPause"
-            style="@style/Widget.Material3.Button.IconButton.Filled"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            app:icon="@drawable/ic_play"
-            app:iconSize="24dp"
-            app:backgroundTint="@color/primary" />
-
-        <SeekBar
-            android:id="@+id/seekAnalysisPlayer"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginHorizontal="8dp"
-            android:max="100" />
-
-        <TextView
-            android:id="@+id/tvAnalysisTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="00:00 / 00:00"
-            android:textColor="@color/on_surface"
-            android:textSize="11.5sp"
-            android:fontFamily="monospace"
-            android:textStyle="bold" />
-    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

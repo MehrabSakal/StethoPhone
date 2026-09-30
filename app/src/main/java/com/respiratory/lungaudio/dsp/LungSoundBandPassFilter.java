@@ -39,9 +39,9 @@ import java.util.concurrent.Executors;
  */
 public class LungSoundBandPassFilter {
 
-    public static final double HPF_CUTOFF_HZ = 75.0;
-    public static final double LPF_CUTOFF_HZ = 2500.0;
-    public static final double HARD_LIMITER_CEILING = 0.944; // -0.5 dBFS headroom
+    public static final double HPF_CUTOFF_HZ = 85.0;   // Eliminates low-frequency heart sounds (<75Hz) and chest rumble
+    public static final double LPF_CUTOFF_HZ = 1100.0; // Captures smooth natural lung airflow (100-1000Hz) & cuts mic hiss
+    public static final double HARD_LIMITER_CEILING = 0.85; // Clean headroom, 0.00% clipping
 
     // 4th-order Butterworth Q factors
     private static final double BUTTERWORTH_Q1 = 0.5411961;

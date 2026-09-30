@@ -60,6 +60,15 @@ public class AudioPlayerManager {
         }
     }
 
+    public int getCurrentPosition() {
+        if (mediaPlayer != null) {
+            try {
+                return mediaPlayer.getCurrentPosition();
+            } catch (IllegalStateException ignored) {}
+        }
+        return 0;
+    }
+
     public File getCurrentAudioFile() {
         return currentAudioFile;
     }

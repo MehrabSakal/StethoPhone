@@ -10,9 +10,9 @@ import 'audio_compressor.dart';
 
 /// Clinical-Grade 5-Pass Upgraded Respiratory Sound DSP Pipeline in Dart.
 class AdvancedNoiseCancellation {
-  static const double hpfCutoffHz = 75.0;
-  static const double lpfCutoffHz = 2500.0;
-  static const double hardLimiterCeiling = 0.944; // -0.5 dBFS
+  static const double hpfCutoffHz = 85.0;   // Eliminates low-frequency heart sounds (<75Hz) and chest rumble
+  static const double lpfCutoffHz = 1100.0; // Captures smooth natural lung airflow (100-1000Hz) & cuts mic hiss
+  static const double hardLimiterCeiling = 0.85; // Clean headroom, 0.00% clipping
 
   // 4th-order Butterworth Q factors
   static const double butterworthQ1 = 0.5411961;

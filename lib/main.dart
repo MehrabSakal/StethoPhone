@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'ui/home_page.dart';
+import 'ui/main_navigation_scaffold.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,7 +12,7 @@ class LungSoundApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'PulmoDSP - Lung Sound Analyzer',
+      title: 'PulmoDSP - Lung Sound Recorder',
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.system,
       theme: ThemeData(
@@ -21,9 +21,12 @@ class LungSoundApp extends StatelessWidget {
           seedColor: const Color(0xFF00897B), // Medical Teal
           brightness: Brightness.light,
           primary: const Color(0xFF00897B),
-          secondary: const Color(0xFF3F51B5), // Indigo DSP Accent
+          secondary: const Color(0xFF3F51B5),
         ),
-        scaffoldBackgroundColor: const Color(0xFFF8FAFC),
+        scaffoldBackgroundColor: const Color(0xFFF9FAFB),
+        appBarTheme: const AppBarTheme(
+          scrolledUnderElevation: 0,
+        ),
       ),
       darkTheme: ThemeData(
         useMaterial3: true,
@@ -32,12 +35,15 @@ class LungSoundApp extends StatelessWidget {
           brightness: Brightness.dark,
           primary: const Color(0xFF26A69A),
           secondary: const Color(0xFF7986CB),
-          surface: const Color(0xFF131E32),
-          background: const Color(0xFF0B1120),
+          surface: const Color(0xFF111827),
+          background: const Color(0xFF0B0F19),
         ),
-        scaffoldBackgroundColor: const Color(0xFF0B1120),
+        scaffoldBackgroundColor: const Color(0xFF0B0F19),
+        appBarTheme: const AppBarTheme(
+          scrolledUnderElevation: 0,
+        ),
       ),
-      home: const HomePage(),
+      home: const MainNavigationScaffold(),
     );
   }
 }

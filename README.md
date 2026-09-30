@@ -64,19 +64,30 @@ Raw WAV File
 ```
 SystemApp/
 ├── lib/                                            # Flutter / Dart Engine
-│   ├── main.dart                                   # Material 3 Theme & App Shell
+│   ├── main.dart                                   # Material 3 Minimalist Theme & App Shell
+│   ├── models/
+│   │   └── recording_model.dart                    # Recording metadata, duration, file management
+│   ├── services/
+│   │   └── recording_storage_service.dart          # WAV persistence, scanning, creation & deletion
 │   ├── dsp/
-│   │   ├── advanced_noise_cancellation.dart        # 4th-Order Bandpass + Noise Gate + 10x Boost
+│   │   ├── advanced_noise_cancellation.dart        # 5-Pass DSP: Butterworth + DWT db8 + 10x Boost
 │   │   ├── biquad_filter.dart                      # Direct Form II Transposed Butterworth
 │   │   ├── fft_utils.dart                          # Cooley-Tukey Radix-2 FFT & STFT Spectrogram
-│   │   └── ppg_analyzer.dart                       # Phonopneumogram (PPG) Envelope & BPM Detector
+│   │   ├── ppg_analyzer.dart                       # Phonopneumogram (PPG) Envelope & BPM Detector
+│   │   ├── audio_compressor.dart                   # Dynamics compressor & makeup gain
+│   │   └── spectral_subtraction.dart               # Noise floor cancellation
 │   ├── audio/
 │   │   ├── native_audio_bridge.dart                # USB-C AudioRecord PlatformChannel
 │   │   └── wav_utils.dart                          # Canonical 44-byte WAV parser & writer
 │   └── ui/
-│       ├── home_page.dart                          # Hero Auscultation & 10x ML Controls
-│       ├── analysis_detail_page.dart               # Diagnostic Screen (Spectrogram, PPG, Waveform)
+│       ├── main_navigation_scaffold.dart           # Bottom navigation (Record ⟷ Recordings)
+│       ├── screens/
+│       │   ├── record_screen.dart                  # Classic Minimalist Record Screen (Center Record Button)
+│       │   ├── recordings_list_screen.dart         # Recordings Library (Search, Inline Preview, Manage)
+│       │   └── sound_detail_screen.dart            # Sound Playback, A/B Comparison & Full ML Diagnostics
 │       └── widgets/
+│           ├── live_waveform_visualizer.dart       # Dynamic live soundwave bars for recording
+│           ├── comparison_waveform_widget.dart     # Stacked Raw vs 10x Amplified waveform visualizer
 │           ├── spectrogram_widget.dart             # STFT Canvas Heatmap Widget
 │           ├── phonopneumogram_widget.dart         # Acoustic PPG Canvas Widget
 │           └── time_expanded_waveform.dart         # High-Res Oscillogram Canvas Widget
@@ -94,16 +105,16 @@ SystemApp/
 
 ## 🚀 Running the App
 
-### Option A: Flutter (Full Diagnostic Screen with PPG & Spectrogram)
+### Option A: Flutter (Minimalist UI with Classic Record Screen & Recordings Library)
 ```bash
 flutter pub get
 flutter run
 ```
-1. Tap the Hero button to record raw lung sounds.
-2. Tap **Clean & 10x Amplify Sound** (applies 4th-order filter + noise gate + 10x boost).
-3. Tap **"View PPG, Spectrogram & ML Features"** to open the new diagnostic tab!
+1. **Record Tab**: Tap the big central record button to capture raw auscultation sound with real-time dB visualizer. Tap again to stop and save.
+2. **Recordings Tab**: Browse all recorded sounds via the bottom navigation bar. Preview sounds inline or tap to open.
+3. **Sound Detail & Comparison**: Compare actual raw sound vs 10x amplified sound with seamless A/B audio switching, stacked comparison waveforms, STFT Spectrogram, Acoustic PPG, and ML biomarkers.
 
 ### Option B: Native Android Studio
 1. Open `f:\3-1\SystemApp` in Android Studio.
-2. Select your device or `Pixel_9_Pro` emulator and press **Run (▶)**.
+2. Select your device or emulator and press **Run (▶)**.
 3. Record breath sounds, choose **10x ML**, and tap **Clean & Amplify Audio**.

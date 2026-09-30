@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/background">
 
+    <!-- Top AppBar with Hardware Status Pill -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,34 +27,22 @@
                 android:gravity="center_vertical">
 
                 <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
                     android:src="@drawable/ic_lungs"
                     android:contentDescription="@string/app_name"
                     app:tint="@color/primary" />
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/tvAppTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="10dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="PulmoDSP"
-                        android:textColor="@color/on_surface"
-                        android:textSize="17sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Respiratory Auscultation Analyzer"
-                        android:textColor="@color/on_surface_muted"
-                        android:textSize="11sp" />
-                </LinearLayout>
+                    android:text="PulmoDSP"
+                    android:textColor="@color/on_surface"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <!-- Hardware Status Pill -->
                 <com.google.android.material.card.MaterialCardView
@@ -98,391 +87,232 @@
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
         </com.google.android.material.appbar.MaterialToolbar>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <!-- Main Container for Tabs -->
+    <FrameLayout
+        android:id="@+id/containerContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginBottom="65dp">
 
+        <!-- TAB 1: CLASSIC MINIMALIST RECORD SCREEN -->
         <LinearLayout
+            android:id="@+id/layoutRecordView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:paddingHorizontal="20dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="24dp">
+            android:gravity="center"
+            android:paddingHorizontal="24dp"
+            android:visibility="visible">
 
-            <!-- 1. HERO AUSCULTATION RECORDING ZONE -->
-            <LinearLayout
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <!-- Large Minimalist Timer -->
+            <TextView
+                android:id="@+id/tvTimer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00.0"
+                android:textColor="@color/on_surface"
+                android:textSize="58sp"
+                android:fontFamily="monospace"
+                android:textStyle="bold"
+                android:letterSpacing="0.05" />
+
+            <!-- Status & Decibel Readout -->
+            <TextView
+                android:id="@+id/tvAudioDb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Ready for lung auscultation"
+                android:textColor="@color/on_surface_muted"
+                android:textSize="13sp" />
+
+            <!-- Live Audio Level Visualizer -->
+            <ProgressBar
+                android:id="@+id/progressAudioLevel"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="220dp"
+                android:layout_height="6dp"
+                android:layout_marginTop="20dp"
+                android:max="100"
+                android:progress="0"
+                android:progressDrawable="@drawable/bg_badge_clean" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.2" />
+
+            <!-- Tactile Central Record Button in the middle -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabRecord"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="Record"
+                android:src="@drawable/ic_mic"
+                app:fabCustomSize="88dp"
+                app:maxImageSize="40dp"
+                app:backgroundTint="@color/record_active"
+                app:tint="@android:color/white"
+                app:elevation="8dp"
+                app:pressedTranslationZ="12dp" />
+
+            <TextView
+                android:id="@+id/tvRecordActionLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="TAP TO RECORD"
+                android:textColor="@color/on_surface_muted"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.1" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.5" />
+        </LinearLayout>
+
+        <!-- TAB 2: RECORDINGS LIBRARY LIST -->
+        <LinearLayout
+            android:id="@+id/layoutRecordingsView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <!-- Search Bar -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilSearch"
+                style="@style/Widget.Material3.TextInputLayout.FilledBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="6dp"
+                app:boxCornerRadiusBottomEnd="12dp"
+                app:boxCornerRadiusBottomStart="12dp"
+                app:boxCornerRadiusTopEnd="12dp"
+                app:boxCornerRadiusTopStart="12dp"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:boxBackgroundColor="@color/surface_variant"
+                app:startIconDrawable="@android:drawable/ic_menu_search"
+                app:hintEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etSearchRecordings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Search recordings..."
+                    android:textSize="13sp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:background="@android:color/transparent" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Counter Header -->
+            <TextView
+                android:id="@+id/tvRecordingsCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginVertical="6dp"
+                android:text="0 SOUNDS RECORDED"
+                android:textColor="@color/on_surface_muted"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.08" />
+
+            <!-- Empty State -->
+            <LinearLayout
+                android:id="@+id/layoutEmptyState"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="32dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/ic_waveform"
+                    app:tint="@color/on_surface_muted" />
 
                 <TextView
-                    android:id="@+id/tvRecordingTimer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="00:00.0"
+                    android:layout_marginTop="16dp"
+                    android:text="No Recordings Yet"
                     android:textColor="@color/on_surface"
-                    android:textSize="40sp"
-                    android:fontFamily="monospace"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.05" />
-
-                <!-- Real-time Level Meter Bar -->
-                <LinearLayout
-                    android:layout_width="220dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
-
-                    <com.google.android.material.progressindicator.LinearProgressIndicator
-                        android:id="@+id/progressAudioLevel"
-                        android:layout_width="match_parent"
-                        android:layout_height="6dp"
-                        android:max="100"
-                        android:progress="0"
-                        app:indicatorColor="@color/primary"
-                        app:trackColor="@color/surface_variant"
-                        app:trackCornerRadius="3dp" />
-
-                    <TextView
-                        android:id="@+id/tvAudioDb"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="4dp"
-                        android:text="Tap button to record breath sounds"
-                        android:textColor="@color/on_surface_muted"
-                        android:textSize="11sp" />
-                </LinearLayout>
-
-                <!-- Prominent Circular Tactile Record Button -->
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/fabRecord"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    android:contentDescription="Record / Stop Button"
-                    app:fabCustomSize="84dp"
-                    app:maxImageSize="38dp"
-                    app:srcCompat="@drawable/ic_mic"
-                    app:tint="@color/on_primary"
-                    app:backgroundTint="@color/primary"
-                    app:elevation="6dp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tvRecordActionLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="RECORD RAW LUNG AUDIO"
-                    android:textColor="@color/primary"
-                    android:textSize="11.5sp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.06" />
+                    android:layout_marginTop="6dp"
+                    android:text="Captured lung sounds will appear here for comparison and diagnostic analysis."
+                    android:textAlignment="center"
+                    android:textColor="@color/on_surface_muted"
+                    android:textSize="12.5sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnEmptyRecordNow"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Record a Sound"
+                    app:icon="@drawable/ic_mic" />
             </LinearLayout>
 
-            <View
+            <!-- RecyclerView of Recorded Sounds -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRecordings"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="20dp"
-                android:background="@color/divider" />
-
-            <!-- 2. DSP NOISE REDUCTION & AMPLIFICATION CARD -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardDsp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/surface"
-                app:strokeColor="@color/divider"
-                app:strokeWidth="1dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:src="@drawable/ic_filter"
-                            android:contentDescription="DSP icon"
-                            app:tint="@color/secondary" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginStart="8dp"
-                            android:text="Clean Amplification &amp; Boost"
-                            android:textColor="@color/on_surface"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tvGainValue"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/bg_badge_clean"
-                            android:paddingHorizontal="8dp"
-                            android:paddingVertical="3dp"
-                            android:text="10x Pure Gain"
-                            android:textColor="@color/secondary"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="5-Pass DSP: Butterworth (75-2500Hz) • DWT db8 Heart Separation • Spectral Subtraction • 4:1 Compressor &amp; -0.5dBFS Limiter"
-                        android:textColor="@color/on_surface_muted"
-                        android:textSize="11.5sp" />
-
-                    <!-- Quick Preset Gain Chips -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/chipGain6"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="36dp"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="4dp"
-                            android:padding="0dp"
-                            android:text="3x"
-                            android:textSize="11sp" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/chipGain12"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="36dp"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="4dp"
-                            android:padding="0dp"
-                            android:text="6x"
-                            android:textSize="11sp" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/chipGain18"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="36dp"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="4dp"
-                            android:padding="0dp"
-                            android:text="10x"
-                            android:textSize="11sp" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/chipGain24"
-                            style="@style/Widget.Material3.Button.TonalButton"
-                            android:layout_width="0dp"
-                            android:layout_height="36dp"
-                            android:layout_weight="1"
-                            android:padding="0dp"
-                            android:text="Auto-Max"
-                            android:textSize="10.5sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <com.google.android.material.slider.Slider
-                        android:id="@+id/sliderGain"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:valueFrom="1.0"
-                        android:valueTo="25.0"
-                        android:stepSize="1.0"
-                        android:value="10.0"
-                        app:thumbColor="@color/secondary"
-                        app:trackColorActive="@color/secondary" />
-
-                    <!-- Loading Indicator for DSP -->
-                    <com.google.android.material.progressindicator.LinearProgressIndicator
-                        android:id="@+id/progressDsp"
-                        android:layout_width="match_parent"
-                        android:layout_height="5dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:indeterminate="true"
-                        android:visibility="gone"
-                        app:indicatorColor="@color/secondary"
-                        app:trackColor="@color/surface_variant" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnRemoveNoise"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:enabled="false"
-                        android:text="Clean &amp; Amplify Audio"
-                        android:textSize="13.5sp"
-                        android:textStyle="bold"
-                        app:cornerRadius="12dp"
-                        app:icon="@drawable/ic_filter"
-                        app:iconGravity="textStart"
-                        app:iconSize="18dp"
-                        app:backgroundTint="@color/secondary" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="20dp"
-                android:background="@color/divider" />
-
-            <!-- 3. UNIFIED COMPARATIVE AUSCULTATION PLAYER (A/B Toggle) -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardUnifiedPlayer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/surface"
-                app:strokeColor="@color/divider"
-                app:strokeWidth="1dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Comparative Audio Auscultation"
-                        android:textColor="@color/on_surface"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <!-- Seamless A/B Track Selector -->
-                    <com.google.android.material.button.MaterialButtonToggleGroup
-                        android:id="@+id/toggleTrackGroup"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        app:singleSelection="true"
-                        app:selectionRequired="true">
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnSelectRaw"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:enabled="false"
-                            android:text="Original Raw"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnSelectCleaned"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:enabled="false"
-                            android:text="Cleaned (+18dB)"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
-                    </com.google.android.material.button.MaterialButtonToggleGroup>
-
-                    <!-- Active track metadata -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/tvPlayerInfo"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Record audio to begin"
-                            android:textColor="@color/on_surface_muted"
-                            android:textSize="11.5sp" />
-
-                        <TextView
-                            android:id="@+id/tvPlayerDuration"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="00:00 / 00:00"
-                            android:textColor="@color/on_surface"
-                            android:textSize="11.5sp"
-                            android:fontFamily="monospace"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <!-- Scrubber Slider -->
-                    <SeekBar
-                        android:id="@+id/seekPlayer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:enabled="false"
-                        android:max="100" />
-
-                    <!-- Playback Action & Open Diagnostics Row -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnPlayPause"
-                            style="@style/Widget.Material3.Button.IconButton.Filled"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:enabled="false"
-                            app:icon="@drawable/ic_play"
-                            app:iconSize="24dp"
-                            app:backgroundTint="@color/primary" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnOpenAnalysis"
-                            style="@style/Widget.Material3.Button.TonalButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="48dp"
-                            android:layout_marginStart="12dp"
-                            android:enabled="false"
-                            android:text="View PPG, Spectrogram &amp; ML"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            app:icon="@drawable/ic_waveform"
-                            app:iconSize="18dp"
-                            app:cornerRadius="12dp" />
-                    </LinearLayout>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingBottom="16dp" />
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+    </FrameLayout>
+
+    <!-- Bottom Navigation Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/divider" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigation"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:background="@color/surface"
+            app:elevation="0dp"
+            app:itemIconTint="@color/primary"
+            app:itemTextColor="@color/primary"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/bottom_nav_menu" />
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
