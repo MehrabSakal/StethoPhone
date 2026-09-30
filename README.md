@@ -92,18 +92,4 @@ SystemApp/
 
 ---
 
-## 🚀 Running the App
 
-### Option A: Flutter (Full Diagnostic Screen with PPG & Spectrogram)
-```bash
-flutter pub get
-flutter run
-```
-1. Tap the Hero button to record raw lung sounds.
-2. Tap **Clean & 10x Amplify Sound** (applies 4th-order filter + noise gate + 10x boost).
-3. Tap **"View PPG, Spectrogram & ML Features"** to open the new diagnostic tab!
-
-### Option B: Native Android Studio
-1. Open `f:\3-1\SystemApp` in Android Studio.
-2. Select your device or `Pixel_9_Pro` emulator and press **Run (▶)**.
-3. Record breath sounds, choose **10x ML**, and tap **Clean & Amplify Audio**.
